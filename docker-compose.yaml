@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  service-nginx:
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - service-php
+      - db
+    volumes:
+      - ./app:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./docker/nginx/logs:/var/log/nginx
+    ports:
+      - "80:80"
+    networks:
+      - net
+
+  service-php:
+    image: crunchgeek/php-fpm:7.3-r6
+    volumes:
+      - ./app:/var/www
+    hostname: php
+    working_dir: /var/www
+    ports:
+      - "9000"
+    networks:
+      - net
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'qwerty'
+      MYSQL_ROOT_PASSWORD: 'qwerty'
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql/
+    networks:
+      - net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_USER: root
+      PMA_PASSWORD: qwerty
+    depends_on:
+      - db
+    ports:
+      - '3000:80'
+    networks:
+      - net
+
+  redis:
+    image: redis
+    ports:
+      - '6379'
+    networks:
+      - net
+
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

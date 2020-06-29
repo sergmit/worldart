@@ -1,0 +1,29 @@
+{
+    "name": "root/www",
+    "authors": [
+        {
+            "name": "Sergey Mitugov",
+            "email": "mitugov@bk.ru"
+        }
+    ],
+    "require": {
+        "fabpot/goutte": "^4.0",
+        "ext-fileinfo": "*",
+        "ext-pdo": "*",
+        "ext-iconv": "*",
+        "predis/predis": "^1.1",
+        "twig/twig": "^3.0",
+        "illuminate/database": "^7.17"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "Console\\": "console/"
+        }
+
+    }
+}
